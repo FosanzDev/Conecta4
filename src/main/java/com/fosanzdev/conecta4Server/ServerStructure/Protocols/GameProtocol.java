@@ -1,3 +1,15 @@
+/* Game Protocol Class
+ * Author: Esteban Sánchez Llobregat (@FosanzDev)
+ * 
+ * Class used to implement the Game Protocol. It's used for commands related to the game
+ * (like placing a token, etc.).
+ * 
+ * It implements the IProtocol interface, so it has to implement the isCommand and in methods.
+ * This methods are used to check if the command is a valid command and to parse the command.
+ * 
+ * This class will connect the API of the game with the Server commands.
+ */
+
 package com.fosanzdev.conecta4Server.ServerStructure.Protocols;
 
 import java.io.BufferedReader;
