@@ -6,6 +6,7 @@
 
 package com.fosanzdev.conecta4Server.ServerStructure.Protocols;
 
+import com.fosanzdev.conecta4Server.ServerStructure.Response;
 
 public interface IProtocol {
 

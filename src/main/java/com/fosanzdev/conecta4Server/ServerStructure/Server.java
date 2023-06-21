@@ -16,6 +16,11 @@ import java.util.ArrayList;
 
 public class Server extends Thread implements IServer{
 
+    //Constants
+    public static final String GAME_NAME = "Conecta4";
+    public static final String GAME_VERSION = "1.0";
+    public static final String[] SUPPORTED_CLIENT_VERSIONS = {"1.0"};
+
     //Attributes
     private final CommandParserFactory cpf;
     private final ArrayList<ClientThread> players;
@@ -52,5 +57,20 @@ public class Server extends Thread implements IServer{
     public boolean isUp(){
         //Comprobar si el servidor está activo
         return true;
+    }
+
+    @Override
+    public String getGameName() {
+        return GAME_NAME;
+    }
+
+    @Override
+    public String getGameVersion() {
+        return GAME_VERSION;
+    }
+
+    @Override
+    public String[] getSupportedClientversions() {
+        return SUPPORTED_CLIENT_VERSIONS;
     }
 }

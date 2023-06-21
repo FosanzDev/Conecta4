@@ -2,8 +2,6 @@ package com.fosanzdev.conecta4Server.ServerStructure;
 
 import com.fosanzdev.Utils.TimeoutCaller;
 import com.fosanzdev.conecta4Server.ServerStructure.Protocols.CommandParser;
-import com.fosanzdev.conecta4Server.ServerStructure.Protocols.Response;
-import com.fosanzdev.conecta4Server.ServerStructure.Protocols.ResultCode;
 
 import java.io.BufferedReader;
 import java.io.IOException;

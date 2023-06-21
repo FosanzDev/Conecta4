@@ -5,7 +5,7 @@
  * response from the client or the server, so communication can be done.
  */
 
-package com.fosanzdev.conecta4Server.ServerStructure.Protocols;
+package com.fosanzdev.conecta4Server.ServerStructure;
 
 public class Response {
 

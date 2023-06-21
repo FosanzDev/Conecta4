@@ -3,7 +3,7 @@
  * Enum used to identify the result of the command
  */
 
-package com.fosanzdev.conecta4Server.ServerStructure.Protocols;
+package com.fosanzdev.conecta4Server.ServerStructure;
 
 public enum ResultCode {
     COMMAND_OK,

@@ -9,6 +9,9 @@ package com.fosanzdev.conecta4Server.ServerStructure.Protocols;
 
 import java.net.Socket;
 
+import com.fosanzdev.conecta4Server.ServerStructure.Response;
+import com.fosanzdev.conecta4Server.ServerStructure.ResultCode;
+
 public class CommandParser {
 
     //Protocols

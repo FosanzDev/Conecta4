@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 
+import com.fosanzdev.conecta4Server.ServerStructure.Response;
+
 public class GameProtocol implements IProtocol{
 
     Socket clientSocket;

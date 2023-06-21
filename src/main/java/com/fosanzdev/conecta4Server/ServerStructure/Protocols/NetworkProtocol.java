@@ -15,6 +15,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import com.fosanzdev.conecta4Server.ServerStructure.Response;
+import com.fosanzdev.conecta4Server.ServerStructure.ResultCode;
+
 public class NetworkProtocol implements IProtocol{
 
     // Create the variables to store the socket and the input and output streams.
@@ -24,8 +27,6 @@ public class NetworkProtocol implements IProtocol{
 
     // Create a list with the commands that this protocol can handle.
     private static ArrayList<String> commands = new ArrayList<>(Arrays.asList(
-            "PING",
-            "PONG",
             "HELLO",
             "WELCOME",
             "BYE",
