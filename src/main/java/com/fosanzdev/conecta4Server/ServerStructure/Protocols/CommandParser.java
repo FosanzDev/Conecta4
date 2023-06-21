@@ -1,9 +1,5 @@
 package com.fosanzdev.conecta4Server.ServerStructure.Protocols;
 
-import com.fosanzdev.conecta4Server.ServerStructure.ClientThread;
-import com.fosanzdev.conecta4Server.ServerStructure.Server;
-
-import java.io.IOException;
 import java.net.Socket;
 
 public class CommandParser {

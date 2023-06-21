@@ -1,7 +1,5 @@
 package com.fosanzdev.conecta4Server.ServerStructure.Protocols;
 
-import com.fosanzdev.conecta4Server.ServerStructure.Server;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -48,16 +46,12 @@ public class NetworkProtocol implements IProtocol{
         String commandName = commandParts[0];
         switch (commandName){
             case "PING":
-                System.out.println("NetworkProtocol.in: PING");
                 out.println("PING");
                 String response = null;
-                System.out.println("Response is: " + response);
                 try {
                     response = in.readLine();
-                    System.out.println("response: " + response);
                     if (response.equals("PONG")){
-                        System.out.println("Respuesta correcta al PING");
-                        return new Response(ResultCode.OK, "PONG");
+                        return new Response(ResultCode.COMMAND_OK, "Respuesta correcta al PING");
                     }
                     else
                         return new Response(ResultCode.COMMAND_ERROR, "El cliente no ha respondido correctamente al PING");

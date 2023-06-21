@@ -15,7 +15,6 @@ public class Main {
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             while (true){
-                BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
                 String userInput = in.readLine();
                 System.out.println("echo: " + userInput);
                 if (userInput.equals("PING"))

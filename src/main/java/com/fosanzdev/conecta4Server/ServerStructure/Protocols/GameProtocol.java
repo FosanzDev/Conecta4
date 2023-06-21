@@ -1,7 +1,5 @@
 package com.fosanzdev.conecta4Server.ServerStructure.Protocols;
 
-import com.fosanzdev.conecta4Server.ServerStructure.Server;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
