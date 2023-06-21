@@ -19,7 +19,8 @@ public class ClientThread extends Thread{
     private PrintStream out;
     private BufferedReader in;
     //private long lastResponseTime = System.currentTimeMillis();
-    private final int PING_INTERVAL = 10000;
+    private final int PING_INTERVAL = 30000;
+    private final int PING_TIMEOUT = 5000;
     TimeoutCaller tc;
 
     public ClientThread(Socket socket, CommandParser cp, IServer server){
@@ -42,7 +43,16 @@ public class ClientThread extends Thread{
             @Override
             public void run() {
                 System.out.println("PINGING");
+                TimeoutCaller pingTimeoutCaller = new TimeoutCaller(PING_TIMEOUT, new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println("PING TIMEOUT");
+                        destruct();
+                    }
+                }, true);
+                pingTimeoutCaller.start();
                 Response response = ping();
+                pingTimeoutCaller.cancel();
                 System.out.println("Response: " + response.resultCode + " " + response.response);
                 if (response.resultCode == ResultCode.COMMAND_OK) {
                     System.out.println("PING RESPONSE OK");
