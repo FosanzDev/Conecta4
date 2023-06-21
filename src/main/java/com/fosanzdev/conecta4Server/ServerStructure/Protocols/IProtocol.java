@@ -13,5 +13,5 @@ public interface IProtocol {
     boolean isCommand(String commandName);
 
     //Parses the command and returns a response from the client
-    Response in(String command);
+    Response in(String commandName, String command);
 }

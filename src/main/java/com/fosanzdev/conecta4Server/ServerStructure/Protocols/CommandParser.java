@@ -31,10 +31,10 @@ public class CommandParser {
         String commandName = command.split(" ")[0];
         if (np.isCommand(commandName)) {
             //If it is a Network Protocol command, redirect it to the Network Protocol
-            return np.in(command);
+            return np.in(commandName, command);
         } else if (gp.isCommand(commandName)) {
             //If it is a Game Protocol command, redirect it to the Game Protocol
-            return gp.in(command);
+            return gp.in(commandName, command);
         } else {
             //If it is not a valid command, return an error
             return new Response(ResultCode.COMMAND_NOT_FOUND, "Command not found");

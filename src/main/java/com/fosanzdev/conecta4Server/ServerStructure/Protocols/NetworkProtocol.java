@@ -59,12 +59,8 @@ public class NetworkProtocol implements IProtocol{
      * It parses the command and returns a response.
      */
     @Override
-    public Response in(String command){
-        //TODO: Send the name and the command so it's separated by default
-        System.out.println("Socket: " + clientSocket.getInetAddress().getHostAddress());
-        System.out.println("Command: " + command);
+    public Response in(String commandName, String command){
         String[] commandParts = command.split(" ");
-        String commandName = commandParts[0];
         switch (commandName){
             case "EXIT":
                 break;

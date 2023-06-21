@@ -38,7 +38,7 @@ public class GameProtocol implements IProtocol{
         return false;
     }
 
-    public Response in(String command) {
+    public Response in(String commandName, String command) {
             return null;
         }
 }
