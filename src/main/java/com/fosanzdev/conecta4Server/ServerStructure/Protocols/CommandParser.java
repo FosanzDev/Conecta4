@@ -9,6 +9,7 @@ package com.fosanzdev.conecta4Server.ServerStructure.Protocols;
 
 import java.net.Socket;
 
+import com.fosanzdev.conecta4Server.ServerStructure.IServer;
 import com.fosanzdev.conecta4Server.ServerStructure.Response;
 import com.fosanzdev.conecta4Server.ServerStructure.ResultCode;
 
@@ -22,9 +23,9 @@ public class CommandParser {
     Socket socket;
 
     //Constructor
-    public CommandParser(Socket socket){
-        np = new NetworkProtocol(socket);
-        gp = new GameProtocol(socket);
+    public CommandParser(IServer server, Socket socket){
+        np = new NetworkProtocol(server, socket);
+        gp = new GameProtocol(server, socket);
     }
 
     //Method to check if the command is a valid command and redirect it to the corresponding protocol

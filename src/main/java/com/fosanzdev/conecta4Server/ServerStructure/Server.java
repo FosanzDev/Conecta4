@@ -39,7 +39,7 @@ public class Server extends Thread implements IServer{
             while (true) {
                 //Receives a new player, creates a new thread for him and adds it to the list of players
                 Socket player = server.accept();
-                ClientThread ct = new ClientThread(player, cpf.createCommandParser(player), this);
+                ClientThread ct = new ClientThread(player, cpf.createCommandParser(this, player), this);
                 players.add(ct);
                 System.out.println("Player connected: " + player.getInetAddress().getHostAddress() + ":" + player.getPort());
             }

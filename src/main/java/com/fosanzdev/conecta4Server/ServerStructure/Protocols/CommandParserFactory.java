@@ -10,10 +10,12 @@ package com.fosanzdev.conecta4Server.ServerStructure.Protocols;
 
 import java.net.Socket;
 
+import com.fosanzdev.conecta4Server.ServerStructure.IServer;
+
 public class CommandParserFactory {
 
     //Constructor
-    public CommandParser createCommandParser(Socket socket) {
-        return new CommandParser(socket);
+    public CommandParser createCommandParser(IServer server, Socket socket) {
+        return new CommandParser(server, socket);
     }
 }

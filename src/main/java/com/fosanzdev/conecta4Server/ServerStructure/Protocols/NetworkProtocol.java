@@ -15,30 +15,35 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import com.fosanzdev.conecta4Server.ServerStructure.IServer;
 import com.fosanzdev.conecta4Server.ServerStructure.Response;
 import com.fosanzdev.conecta4Server.ServerStructure.ResultCode;
 
 public class NetworkProtocol implements IProtocol{
 
     // Create the variables to store the socket and the input and output streams.
+    private IServer server;
     private Socket clientSocket;
     private PrintStream out;
     private BufferedReader in;
+    private Welcomer welcomer;
 
     // Create a list with the commands that this protocol can handle.
     private static ArrayList<String> commands = new ArrayList<>(Arrays.asList(
-            "HELLO",
-            "WELCOME",
-            "BYE",
-            "ERROR"
+        "PONG",
+        "WELCOME",
+        "BYE",
+        "ERROR"
     ));
 
 
     // Constructor
-    public NetworkProtocol(Socket socket){
+    public NetworkProtocol(IServer server, Socket socket){
         //Create the input and output streams
         try{
             this.clientSocket = socket;
+            this.server = server;
+            this.welcomer = new Welcomer(server);
             out = new PrintStream(socket.getOutputStream());
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         } catch (IOException ioe){
@@ -62,18 +67,22 @@ public class NetworkProtocol implements IProtocol{
     @Override
     public Response in(String commandName, String command){
         String[] commandParts = command.split(" ");
-        switch (commandName){
-            case "EXIT":
-                break;
-            case "WELCOME":
-                break;
-            case "BYE":
-                break;
-            case "ERROR":
-                break;
-            default:
-                return new Response(ResultCode.COMMAND_NOT_FOUND, "Command not found");
+        try{
+            switch (commandName){
+                case "PONG":
+                    return new Response(ResultCode.COMMAND_OK, "PONG");
+                case "WELCOME":
+                    return welcomer.welcome(clientSocket);
+                case "BYE":
+                    return new Response(ResultCode.COMMAND_OK, "BYE");
+                case "ERROR":
+                    break;
+                default:
+                    return new Response(ResultCode.COMMAND_NOT_FOUND, "Command not found");
+            }
+            return null;
+        } catch (Exception e){
+            return new Response(ResultCode.IOError, "Error parsing the command");
         }
-        return null;
     }
 }

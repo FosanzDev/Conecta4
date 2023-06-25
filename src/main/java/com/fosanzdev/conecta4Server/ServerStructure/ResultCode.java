@@ -8,5 +8,5 @@ package com.fosanzdev.conecta4Server.ServerStructure;
 public enum ResultCode {
     COMMAND_OK,
     COMMAND_NOT_FOUND,
-    COMMAND_ERROR
+    COMMAND_ERROR, IOError
 }

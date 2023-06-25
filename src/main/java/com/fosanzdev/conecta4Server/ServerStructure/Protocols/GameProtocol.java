@@ -17,16 +17,19 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 
+import com.fosanzdev.conecta4Server.ServerStructure.IServer;
 import com.fosanzdev.conecta4Server.ServerStructure.Response;
 
 public class GameProtocol implements IProtocol{
 
     Socket clientSocket;
+    IServer server;
     PrintStream out;
     BufferedReader in;
 
-    public GameProtocol(Socket clientSocket){
+    public GameProtocol(IServer server, Socket clientSocket){
         try{
+            this.server = server;
             this.clientSocket = clientSocket;
             out = new PrintStream(clientSocket.getOutputStream());
             in = new BufferedReader(new java.io.InputStreamReader(clientSocket.getInputStream()));

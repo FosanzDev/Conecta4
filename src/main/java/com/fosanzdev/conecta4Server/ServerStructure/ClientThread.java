@@ -21,8 +21,8 @@ public class ClientThread extends Thread{
     private CommandParser commandParser;
     private PrintStream out;
     private BufferedReader in;
+    private PingPong pingPong = new PingPong();
     //private long lastResponseTime = System.currentTimeMillis();
-    private TimeoutCaller tc;
 
     //Constructor
     public ClientThread(Socket socket, CommandParser cp, IServer server){
@@ -50,36 +50,39 @@ public class ClientThread extends Thread{
         // ------------------------------------------
         // ------------------ PING ------------------
         // ------------------------------------------
+        pingPong.start();
 
-        //Runnable to be executed for the ping
-        tc = new TimeoutCaller(PING_INTERVAL, new Runnable() {
-            @Override
-            public void run() {
-                //Inside the interval timeout caller there's another timeout caller for the ping response
-                //If PING_TIMEOUT time passes without a response, the client is disconnected
-                //This TimeoutCaller executes only once, so it's automatically cancelled after the first execution
-                //TimeoutCaller is cancelled once the response is received
-                TimeoutCaller pingTimeoutCaller = new TimeoutCaller(PING_TIMEOUT, new Runnable() {
-                    @Override
-                    public void run() {
-                        System.out.println("PING TIMEOUT");
-                        destruct();
-                    }
-                }, true);
-                //Start the ping timeout caller
-                pingTimeoutCaller.start();
-                Response response = ping();
-                //Cancel the ping timeout caller once the response is received
-                //If the response is not received, the ping timeout caller will disconnect the client 
-                pingTimeoutCaller.cancel();
-                if (response.resultCode != ResultCode.COMMAND_OK) {
-                    System.out.println("PING RESPONSE ERROR");
-                    destruct();
+        // ------------------------------------------
+        // --------------- WELCOME ------------------
+        // ------------------------------------------
+
+        //Send the welcome message to the command parser
+        //Doing this we can validate the client version
+        in("WELCOME");
+
+        // ------------------------------------------
+        // --------------- COMMANDS -----------------
+        // ------------------------------------------
+
+
+        String command;
+        try{
+            while ((command = in.readLine()) != null) {
+                System.out.println("COMMAND: " + command);
+                if (command.equals("PONG")) {
+                    pingPong.receivedPong();
+                    continue;
                 }
-            }
-        });
-        //Start the ping timeout caller
-        tc.start();
+
+                //If the command is not null, parse it and send the response to the client
+                Response response = commandParser.in(command);
+                out.println(response.toString());
+                //lastResponseTime = System.currentTimeMillis();
+        }
+        } catch (IOException ioe) {
+                System.out.println("USER DISCONNECTED");
+                destruct();
+        }
     }
 
     /**
@@ -88,7 +91,7 @@ public class ClientThread extends Thread{
      */
     public void destruct(){
         try {
-            tc.cancel(); //Cancel the ping timeout caller
+            pingPong.cancel(); //Cancel the ping timeout caller
             in.close(); //Close the input stream
             out.close(); //Close the output stream
             socket.close(); //Close the socket
@@ -109,9 +112,62 @@ public class ClientThread extends Thread{
 
     /**
      * Sends a ping command to the client
-     * @return Response from the client
      */
-    public Response ping(){
-        return in("PING");
+    public void ping(){
+        out.println("PING");
+    }
+
+    
+    /**
+     * Class to manage the ping pong protocol
+     * It sends a ping command to the client every PING_INTERVAL milliseconds
+     * If the client doesn't respond in PING_TIMEOUT milliseconds, the client is disconnected
+     * If the client responds, the ping timeout caller is cancelled
+     * 
+     * The ping timeout/interval caller is a TimeoutCaller that executes a Runnable after a certain time
+     * It can be cancelled
+     */
+    private class PingPong extends Thread{
+
+        private TimeoutCaller pingIntervalCaller;
+        private TimeoutCaller pingTimeoutCaller;
+
+
+        public PingPong(){
+            super();
+        }
+
+        @Override
+        public void run(){
+            pingIntervalCaller = new TimeoutCaller(PING_INTERVAL, new Runnable() {
+            @Override
+            public void run() {
+                //Inside the interval timeout caller there's another timeout caller for the ping response
+                //If PING_TIMEOUT time passes without a response, the client is disconnected
+                //This TimeoutCaller executes only once, so it's automatically cancelled after the first execution
+                //TimeoutCaller is cancelled once the response is received
+                pingTimeoutCaller = new TimeoutCaller(PING_TIMEOUT, new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println("PING TIMEOUT");
+                        destruct();
+                    }
+                }, true);
+                //Start the ping timeout caller
+                pingTimeoutCaller.start();
+                ping();
+            }
+        });
+            //Start the ping interval caller
+            pingIntervalCaller.start();
+        }
+
+        public void cancel() {
+            pingIntervalCaller.cancel();
+        }
+
+        public void receivedPong() {
+            pingTimeoutCaller.cancel();
+        }
     }
 }
