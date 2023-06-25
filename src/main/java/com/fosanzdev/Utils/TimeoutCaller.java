@@ -36,7 +36,7 @@ public class TimeoutCaller extends Thread{
     public void run(){
         long start = System.currentTimeMillis();
         while (running){
-            if (System.currentTimeMillis() - start >= timeout) {
+            if (System.currentTimeMillis() - start >= timeout && running) {
                 runnable.run();
                 if (onlyOnce)
                     cancel();
